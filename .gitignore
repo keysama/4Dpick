@@ -1,2 +1,4 @@
-/node_modules/
-/package-lock.json
+server/node_modules/
+project/node_modules/
+server/package-lock.json
+project/package-lock.json

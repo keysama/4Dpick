@@ -1,23 +1,27 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
+<div class="h-100">
+    <top></top>
+    <navb></navb>
     <router-view/>
-  </div>
+</div>
+
+
+
 </template>
 
 <script>
+import top from './components/top.vue';
+import navb from './components/nav.vue';
 export default {
-  name: 'App'
+  name: 'App',
+  components:{
+    top,navb
+  },
+  
 }
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="less">
+@import "./assets/css/common.less";
+
 </style>
