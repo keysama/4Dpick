@@ -1,0 +1,344 @@
+??
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Payout
+
+Integration
+Specification
+
+Version 1.0.15
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+By Help2Pay Engineering Team
+3/2/2016
+
+??	2
+
+
+Contents
+
+
+Executive Summary	3
+
+Introduction	4
+
+About this document	5
+
+Keywords definition and terms use in this document.	6
+
+Payout Process Diagram	7
+
+Return Status Flow	8
+
+Payout Submission Process	9
+
+Create Hash Key for Payout Submission	11
+
+Response handling for Payout Result	13
+
+Status Result Return	14
+
+Appendix	15
+
+Payment Result Status Code	15
+
+Currency Code	15
+
+Payout Bank Code	16
+
+Payout Service Processing Duration	17
+
+
+
+Executive Summary
+
+E-Commerce businesses have evolved to an unprecedented height today. With internet services becoming more affordable, the exponentially growing of internet users have preferred to shop, pay bills, etc online. Millions of people spend billions of dollars on this borderless marketplace.
+
+The existence of online payment solutions can be seen. They act as a bridge or gateway to guarantee the payments from the consumers to merchants are made instantly, efficiently and securely. It truly enhances online shoppers' experience. Just few clicks away, shopping or paying bills online can be such a breeze.
+
+We strongly believe that our existence will to make a difference in every shoppers' or payees 'lives, allowing secured and timely transactions. By running 24/7 daily, we make sure our payment system serves you, anytime, anywhere. By partnering with major banks, integrating into numerous payment providers' networks, we built a comprehensive range of solutions, catering to the needs of merchants in different markets.
+
+
+
+Introduction
+
+
+Help2Pay is an interesting design of web interface that incorporated in 2014.In order to provide an outstanding online payment solution to the consumers and clients, Help2Pay stands on one strong belief. The project existed in order to make a difference for every consumer by providing an effective and secured automated transaction on a real time basis.
+
+Meanwhile, Help2Pay provide as a middleware to effective assist consumers by simplify the process of completing purchasing transaction with merchandizer and help clients to monitor their business transaction at real time basis.
+
+Payout module is to assist our valued Merchants to lighten their workload by automating their payout process by using our Payout system. By doing so, we can ease their burden and save their valuable time by lending a hand to handle the payout matters.
+
+We have a secure and responsive network of people handling your business. No compromise will ever be taken into consideration. YOU ARE OUR PRIORITY. We thrive to be the best in the market, providing our clients nothing less than our utmost efforts.
+
+
+
+About this document
+
+
+This document is to provide guidance to our client in order to have a deeper understanding on Help2Pay＊s Payout business transaction flows and web services functions that facilitate the system integration with the merchant＊s e-commerce application.
+
+The manual is to provide guidance for system developers, administrators and maintenance personnel whom may use the services of Help2Pay Payout application. To be able to fully utilize the manual guide, one＊s is required to have basic knowledge as below:
+
+Knowledge of operation systems, such as Microsoft Windows Server and Linux.
+
+Knowledge of website configuration and web page development based on any of the operation systems listed above.
+
+Web development skills of standard CGI (Common Gateway Integration), ASP (Active Server Page), .NET Framework, ISAPI, PHP or JAVA.
+
+Basic understanding of web security.
+
+
+
+Keywords definition and terms use in this document.
+
+
+Gateway 每 Help2Pay
+
+Merchant 每 Help2Pay＊s merchants (could imply as the server or the website itself)
+
+Customer 每 Merchant＊s customer or Internet user.
+
+Payout Submission 每 A valid submission to Gateway by the Merchant in the payment process
+
+Payout Result 每 A returned result to Merchant by the Gateway after the fund transfer process is completed.
+
+Security Code 每 A secret key provided to Merchant for encryption purpose.
+
+
+
+Payout Process Diagram
+??
+
+
+
+Return Status Flow
+??
+
+
+
+Payout Submission Process
+
+The Gateway uses standard html web form submission via HTTP Post to establish the Payout Transfer from server.
+??
+
+Due to security reason, we will only allow whitelisted IP to communicate with us.
+
+It will return HTTP 403 Forbidden error while it is not whitelisted.
+??
+
+The table listing below shown the parameters for payout submission.
+
+
+
+
+
+Mechant will call the gateway＊s payout transaction service and the gateway will response respectively message to merchant.
+
+XML format sample:
+
+<Payout>
+
+<statusCode>000</statusCode>
+
+<message>Success</message>
+
+</Payout>
+
+
+Note:
+
+
+
+
+
+Create Hash Key for Payout Submission
+
+To prevent unauthorized or fraudulent Payout Submission. The Gateway requires the Merchant to generate a Key for Payout Submission with SecurityCode.
+
+1ㄘ Transaction is received by the Gateway, hash Key will be verified. The payment process will stop immediately if the verification fails. (a)
+
+2ㄘ During Payout Submission process, gateway require Merchant provide a page to allow Gateway to post http request to cross check/confirm the transaction submit by merchant. (a)(b)
+
+(a)
+
+To generate the hash Key, Merchant is required to use cryptographic hash function, MD5 to hash the combination of details (Merchant, Reference, Customer, Amount, Currency, and Datetime) during Payment Submission with SecurityCode. Details as shown below:
+
+MD5({MerchantCode }{TransactionId }{MemberCode }{Amount}{CurrencyCode}{TransactionDat etime}{ToBankAccountNumber }{SecurityCode})
+
+Below is the sample of generating Key.
+
+MerchantCode = ※M00001§
+
+TransactionID = ※T123456789§
+
+MemberCode = ※CUST1001§
+
+Amount = ※12.00§
+
+CurrencyCode = ※CNY§
+
+TransactionDatetime = ※2012-05-21 08:04:00PM§
+
+ToBankAccountNumber = ※12345678§
+
+SecurityCode = ※eQIkGnUeK§
+
+
+
+String to be hash will be MD5
+
+(※M00001T123456789CUST100112.00CNY2012052120040012345678eQIkGnUeK§)
+
+Notes:
+
+1.	TransactionDate must be in ※yyyyMMddHHmmss§ format, and the hour in 24 hours＊ time format. e.g.
+
+2012-01-15 2:12PM will be 20120115141200,
+
+2012-12-17 2:12AM will be 20121217021200
+
+2.	Amount displayed will be in 2 decimal point format. e.g.
+
+1200 will be 1200.00
+
+523.1 will be 523.10
+
+
+
+(b)Withdrawal verification URL
+
+Withdrawal verification URL will use to confirm the payout request is from your system. To work correctly, our system will make a http request to the provided URL with transaction data and the URL ONLY should print/display a word ※True§ on the page. Else it will trigger fail status request with the error ※failed to verify with merchant response§.
+
+Thus, you will need to provide us an API to callback.
+
+Sample POST URL: www.ImMerchant01.com/verifytransaction.aspx?transId=1&key=abc123
+
+Query String explanation:
+
+transId : the transaction id from merchant01
+
+key : is the hash key from H2P for merchant01 to verify(refer (a))
+
+Result:
+
+A result response from merchant. (Not case sensitive)
+
+
+
+
+
+Response handling for Payout Result
+
+
+After the Payment Submission process, the gateway calls back the Merchant＊s backend URL (BackURI provided during merchant＊s Payment Submission) with corresponding Payment Result.
+
+The table listing below show details of the variables returned in the result.
+
+
+
+
+
+Status Result Return
+
+
+During the Payout process, every single Payout result will be returned to Merchant upon completion. Similarly, the Key is also used for the Payout Result for verifying the response from the Gateway to the Merchant.
+
+The Payout Result will only be considered as valid when the generated encryption hash matches with Key.
+
+To generate the Key hash, Merchant is required to use cryptographic hash function, MD5 to hash the combination of details (Merchant, Reference, Amount and Currency) by using the SecurityCode.
+
+Details as shown below:
+
+{Key} =
+
+MD5({MerchantCode}{TransactionID}{MemberCode}{Amount}{CurrencyCode}{Status}{SecurityC
+
+ode})
+
+Below is the sample of generating the Encryption Key.
+
+MerchantCode = ※M00001§
+
+TransactionID = ※T123456789§
+
+MemberCode = ※CUST1001§
+
+Amount = ※12.00§
+
+CurrencyCode = ※CNY§
+
+StatusCode = §000§
+
+SecurityCode = ※eQIkGnUeK§
+
+
+
+String to be hash will be MD5(※M00001T123456789CUST100112.00CNY000eQIkGnUeK§) Notes:
+
+1.	Amount display will be in 2 decimal point format. e.g.
+
+1200 will be 1200.00
+
+523.1 will be 523.10
+
+2.	Be reminded that the matching of the generated encryption hash and Key is not case sensitive.
+
+
+
+Appendix
+
+
+Payment Result Status Code
+
+
+
+??
+
+??
+
+
+Payout Service Processing Duration
+
+For any Malaysia and Thai Bank mentioned in ※Payout Bank Code§ will takes approximately 5 minutes to complete the process in normal situation. Any unpredictable occurrence (including unlisted bank), transaction will definitely require at least within 1 hour processing time.
+
+For any Vietnam Bank and Indonesia Bank mentioned in ※Payout Bank Code§ will takes approximately 1 hour to complete the process in normal situation. Any unpredictable occurrence, transaction will definitely require at least within 3 hours processing time.
+

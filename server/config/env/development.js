@@ -5,7 +5,7 @@ const time = timeStemp.getFullYear() + '_' + timeStemp.getMonth() + '_' + timeSt
 
 module.exports = {
 
-	port : 8081,//监听端口号
+	port : 8083,//监听端口号
 
 	logger : {//配置日志
 		respondTime : true,//是否开启记录相应时间
@@ -20,8 +20,14 @@ module.exports = {
         host: '127.0.0.1',
         user: 'root',
         password: '',
-        database: 'manage',
+        database: '4dpick',
         port:'3306',
         dateStrings: true
+	},
+
+	schedule : {//定时器
+		switch : false,//开关
+		time : '* 1 * * * *'//秒(0-59)，分(0-59)，时(0-23)，日(1-31)，月(1-12)，周(0-7)(0\7是周日)
+							 //每周1的1点1分30秒触发 ：'30 1 1 * * 1'
 	}
 }

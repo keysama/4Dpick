@@ -11,6 +11,6 @@ router
 
 	.post('/post', testController.testPost)
 
-	.all('/', testController.testAll)
+	.all('/t', testController.testAll)
 
 module.exports = router;

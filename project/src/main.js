@@ -7,8 +7,6 @@ import store from './store/'
 import $ from 'jquery'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
-import './assets/js/bootstrap-switch.js'
-import './assets/css/bootstrap-switch.css'
 
 Vue.config.productionTip = false
 

@@ -9,18 +9,18 @@
         <div class="col-md-6">
           <div class="form-group">
             <label class="mulit" >Login ID</label>
-            <input type="text" class="form-control" id="usr">
+            <input type="text" class="form-control" v-model="username" >
           </div>
           <div class="form-group">
             <label class="mulit" >Password</label>
-            <input type="text" class="form-control" id="usr">
+            <input type="password" class="form-control" v-model="password">
           </div>
           <div class="form-group">
-            <div class="btn btn-primary btn-lg" style="margin-top:10px"><i class="iconfont icon-lock"></i>Login</div>
+            <div class="btn btn-primary btn-lg" style="margin-top:10px" @click="goLogin"><i class="iconfont icon-lock"></i>Login</div>
           </div>
-          <div>
-            <router-link to='/'>Forgot Password?</router-link>
-          </div>
+          <!-- <div>
+            <router-link to='/forget'>Forgot Password?</router-link>
+          </div> -->
         </div>
         <div class="col-md-6" style="font-size:25px;font-weight:400">
           Not a member yet?<br/>
@@ -32,16 +32,31 @@
 </template>
 
 <script>
+import {login} from '../../api/account.js';
+import {LOGIN} from '../../store/mutation_types';
 export default {
   data () {
     return {
-      
+      username:'',
+      password:''
     }
   },
   mounted(){
     $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip(); 
     });
+  },
+  methods:{
+    async goLogin(){
+      let data = {
+        username:this.username,
+        password:this.password
+      };
+      let res = await login(data);
+      if(res.data.state==0){alert(res.data.text);return;};
+      this.$store.commit(LOGIN,res.data.body);
+      this.$router.push('/home');
+    }
   }
 }
 </script>

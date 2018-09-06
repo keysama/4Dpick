@@ -4,6 +4,7 @@ const config = require('./index.js').mysql;
 
 var pool = mysql.createPool(config);
 
+
 var query = (sql,callback) => {
     pool.getConnection(function(err,conn){
         if(err){

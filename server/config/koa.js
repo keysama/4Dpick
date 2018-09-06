@@ -4,6 +4,7 @@ const bodyParser = require('koa-bodyparser')//解析请求,get数据放在ctx.re
 const path = require('path');//用来解析路径，自带的包
 const config = require('./index');//根据运行环境返回相应配置文件
 const router = require('../router');//路由
+const cors = require('koa2-cors');
 
 const error = require('../middlewares/error.js');//错务处理的中间件
 const logger = require('../middlewares/logger.js');//配置好的日志中间件
@@ -14,6 +15,13 @@ const port = config.port ? parseInt(config.port) : 8080;//监听端口
 const app = new Koa();//没啥好说的=L=
 
 module.exports = () => {
+	app.use(cors({
+	    exposeHeaders: ['WWW-Authenticate', 'Server-Authorization', 'Date'],
+	    maxAge: 100,
+	    credentials: true,
+	    allowMethods: ['GET', 'POST', 'OPTIONS'],
+	    allowHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Custom-Header', 'anonymous'],
+	}))
 
 	app.use(logger());//日志的中间件
 

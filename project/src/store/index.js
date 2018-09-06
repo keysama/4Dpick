@@ -8,7 +8,8 @@ Vue.use(Vuex)
 
 const state = {
 	loading:false,
-	userInfo:''
+	userInfo:'',
+	homeMode:0
 }
 
 export default new Vuex.Store({
