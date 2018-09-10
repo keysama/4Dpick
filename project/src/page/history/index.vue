@@ -8,7 +8,7 @@
 			<div class="registe-box row">
         <div class="col-md-12">
           <div class="form-group">
-            There are total 2 records in the result.
+            There are total {{orderList.length}} records in the result.
           </div>
         <div class="table-responsive table-sm">
         <table class="table table-striped table-hover">
@@ -16,13 +16,29 @@
               <tr>
                 <th>Order Number</th>
                 <th>Draw Date</th>
-                <th>Order Date/Time</th>
+                <th >Permutation</th>
+                <th >Bet</th>
+                <th >Board</th>
+                <th>Sub Total</th>
+                 <th>Pay Time</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item,key) in orderList" :key="key" :class="{'bg-success text-white':item.state==1}">
-                <td>#{{item.id}}</td>
+              <tr v-for="(item,key) in orderList" :key="key">
+                <td>{{item.number}}</td>
                 <td>{{item.date}}</td>
+                <td>{{item.perms}}</td>
+                <td>
+                  {{item.big==0?'':'Big:'+item.big+','}}
+                  {{item.small==0?'':'Small:'+item.small+','}}
+                  {{item.fourA==0?'':'4A:'+item.fourA}}
+                </td>
+                <td>
+                  <span class="badge badge-pill badge-info" v-for="(item2,key2) in item.numbers.split('|')" :key="key2">
+                    {{item2}}
+                  </span>
+                </td>
+                <td>{{item.totle}}</td>
                 <td>{{item.createTime | timeFilter}}</td>
               </tr>
             </tbody>
@@ -42,14 +58,14 @@
 </template>
 
 <script>
-import {getPiedOrders} from '../../api/orders.js';
+import {getPiedOrders,getBets} from '../../api/orders.js';
 export default {
   created(){
     this.init();
   },
   methods:{
     async init(){
-      let res = await getPiedOrders();
+      let res = await getBets();
       if(res.data.state == 0){alert(res.data.text);return};
       this.orderList = res.data.body;
     }
@@ -71,6 +87,14 @@ export default {
             m = now.getMonth() + 1,
             d = now.getDate();
         return y + "-" + (m < 10 ? "0" + m : m) + "-" + (d < 10 ? "0" + d : d);
+    }
+  },
+  computed:{
+    total(){
+      if(this.orderList==''){return 0};
+            return this.orderList.sheets.reduce(function(total,num){
+                          return total + parseInt(num.totle)
+                    },0);
     }
   }
 }

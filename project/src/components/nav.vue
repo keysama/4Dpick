@@ -1,6 +1,5 @@
 <template>
   <div class="mynav">
-
       <div class="container hidden-sm">
           <nav class="navbar navbar-default top-navbar justify-content-between hidden-sm align-items-center">
             <ul class="nav">
@@ -24,19 +23,19 @@
                         <i class="iconfont icon-user" style="margin-right:10px"></i>{{$store.state.userInfo.nickname}}
                     </button>
                     <div class="dropdown-menu">
-                        <!-- <li class="text-center">
+                        <li class="text-center">
                             <img src="../assets/img/coins.png" alt="" style="width:20px">
-                            <span>RM65.00</span>
+                            <span>RM {{$store.state.userInfo.amount}}.00</span>
                         </li>
                         <li class="text-center" style="margin-top:10px">
                             <router-link class="btn btn-sm btn-primary" to="/pup">Top-up Credit</router-link>
-                        </li> -->
+                        </li>
 
                         <!-- <div class="dropdown-divider"></div> -->
-                        <router-link class="dropdown-item" to="/history" data-toggle="tooltip" data-container="body" data-placement="left" data-original-title="To show your betting/winning records.">My Bets</router-link>
-                        <!-- <a class="dropdown-item" href="#" data-toggle="tooltip" data-container="body" data-placement="left" data-original-title="List of your top-up records. You may notify us here if you have made a payment.">My Top-up</a>
-                        <a class="dropdown-item" href="#" data-toggle="tooltip" data-container="body" data-placement="left" data-original-title="If you have balance in your credit, you may withdraw it here.">Withdraw</a> -->
-                        <router-link class="dropdown-item" to="/user" data-toggle="tooltip" data-container="body" data-placement="left" data-original-title="To modify your account detail.">My Account</router-link>
+                        <router-link class="dropdown-item" to="/history" data-toggle="tooltip" data-container="body" data-placement="left" data-original-title="To show your betting/winning records."><i class="iconfont icon-icon37" style="margin-right:10px"></i> My Bets</router-link>
+                        <router-link class="dropdown-item" to="/Top-up" data-toggle="tooltip" data-container="body" data-placement="left" data-original-title="List of your top-up records. You may notify us here if you have made a payment."><i class="iconfont icon-money" style="margin-right:10px"></i>My Top-up</router-link>
+                        <!-- <a class="dropdown-item" href="#" data-toggle="tooltip" data-container="body" data-placement="left" data-original-title="If you have balance in your credit, you may withdraw it here.">Withdraw</a> -->
+                        <router-link class="dropdown-item" to="/user" data-toggle="tooltip" data-container="body" data-placement="left" data-original-title="To modify your account detail."><i class="iconfont icon-user" style="margin-right:10px"></i>My Account</router-link>
                         <div class="dropdown-divider"></div>
                         <span class="dropdown-item hover" @click="logout">Logout</span>
                     </div>
@@ -68,19 +67,19 @@
                 <i class="iconfont icon-user" style="margin-right:10px"></i>{{$store.state.userInfo.nickname}}
             </span>
             <div id="user" class="collapse">
-                <!-- <div class="text-center">
+                <div class="text-center">
                     <img src="../assets/img/coins.png" alt="" style="width:20px">
-                    <span class="text-white">RM65.00</span>
+                    <span class="text-white">RM {{$store.state.userInfo.amount}}.00</span>
                 </div>
                 <div class="text-center" >
                     <router-link class="btn btn-sm btn-primary" to="/pup" style="margin-top:10px">Top-up Credit</router-link>
-                </div> -->
+                </div>
 
                 <!-- <div class="dropdown-divider"></div> -->
-                <router-link class="dropdown-item" to="/history" data-toggle="tooltip" data-container="body" data-placement="left" data-original-title="To show your betting/winning records.">My Bets</router-link>
-                <!-- <a class="dropdown-item" href="#" data-toggle="tooltip" data-container="body" data-placement="left" data-original-title="List of your top-up records. You may notify us here if you have made a payment.">My Top-up</a>
-                <a class="dropdown-item" href="#" data-toggle="tooltip" data-container="body" data-placement="left" data-original-title="If you have balance in your credit, you may withdraw it here.">Withdraw</a> -->
-                <router-link class="dropdown-item" to="/user" data-toggle="tooltip" data-container="body" data-placement="left" data-original-title="To modify your account detail.">My Account</router-link>
+                <router-link class="dropdown-item" to="/history" data-toggle="tooltip" data-container="body" data-placement="left" data-original-title="To show your betting/winning records."><i class="icon-font icon-icon37" style="margin-right:10px"></i>My Bets</router-link>
+                <router-link class="dropdown-item" to="/Top-up" data-toggle="tooltip" data-container="body" data-placement="left" data-original-title="List of your top-up records. You may notify us here if you have made a payment."><i class="iconfont icon-money" style="margin-right:10px"></i>My Top-up</router-link>
+                <!-- <a class="dropdown-item" href="#" data-toggle="tooltip" data-container="body" data-placement="left" data-original-title="If you have balance in your credit, you may withdraw it here.">Withdraw</a> -->
+                <router-link class="dropdown-item" to="/user" data-toggle="tooltip" data-container="body" data-placement="left" data-original-title="To modify your account detail."><i class="icon icon-user" style="margin-right:10px"></i>My Account</router-link>
                 <div class="dropdown-divider"></div>
                 <span class="dropdown-item hover" @click="logout">Logout</span>
             </div>

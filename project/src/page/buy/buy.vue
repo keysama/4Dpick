@@ -68,6 +68,8 @@
 
 <script>
 import {get4dDate} from '../../api/4dresult.js';
+import {getConfig} from '../../api/config.js';
+import {getSpecialDate} from '../../api/config.js';
 import {createOrder} from '../../api/orders.js';
 export default {
   created(){
@@ -88,23 +90,77 @@ export default {
     return {
       form : formList,
       numbers : ['magnum','damacai','sabah88','sarawak','singapore','sandakan','toto'],
-      date : ''
+      date : '',
+      timelimit:'',
+      specialDate:[]
     }
   },
   computed:{
      getFutherDate(){
       var result = [];
       var now = new Date();
-      Date.prototype.getMonthDay = function(){
-        return this.getDay()+'.'+(this.getMonth() + 1) + '.' + this.getDate() + '.' + this.getFullYear();
-      }
+      if(this.timelimit==''){return []};
+      let limit_h = this.timelimit.split('-')[0];
+      let limit_m = this.timelimit.split('-')[1];
+      let limit_s = this.timelimit.split('-')[2];
+      let specials = this.specialDate.map(item=>{
+        var timer = new Date();
+        timer.setFullYear(item.date.split('-')[0])
+        timer.setMonth(item.date.split('-')[1]-1)
+        timer.setDate(item.date.split('-')[2])
+        return timer.getTime();
+      })
+
       for(var i = 0 ; i < 7 ; i ++){
         now.setDate(now.getDate() + 1);
-        result.push(now.getMonthDay())
+        if(now.getDay()==0 || now.getDay()==3 || now.getDay()==6){
+          console.log('auto',now.getTime())
+          result.push(now.getTime())
+        }
       }
+      specials.forEach(item=>{
+        result.push(item)
+      })
+      console.log('resu;t',result)
 
-      result = result.filter(item=>item.split('.')[0]==3 ||item.split('.')[0]==6 || item.split('.')[0]==0)
-      return result;
+      result = result.map((item,key)=>{
+        var timer = new Date(item);
+        var nowDay = new Date();
+        let now_y = nowDay.getFullYear();
+        let now_m = nowDay.getMonth()+1;
+        let now_d = nowDay.getDate();
+        console.log('now',`${now_y},${now_m},${now_d}`)
+        if(timer.getFullYear()==now_y && timer.getMonth()+1 == now_m && timer.getDate() == now_d){
+          console.log('今天',`${timer.getHours()},${timer.getMinutes()},${timer.getSeconds()}`)
+          console.log('limit',`${limit_h},${limit_m},${limit_s}`)
+          if(timer.getHours()>limit_h){
+            return 'timeOut';
+          }
+          if(timer.getHours()==limit_h && timer.getMinutes()>limit_m ){
+            return 'timeOut';
+          }
+          if(timer.getHours()==limit_h && timer.getMinutes()==limit_m && timer.getSeconds()>=limit_s){
+            return 'timeOut'
+          }
+        }
+        console.log(timer)
+        console.log('cuDate'+key,`${timer.getFullYear()},${timer.getMonth()+1},${timer.getDate()}`)
+
+        if(timer.getFullYear() < now_y){
+          return 'timeOut';
+        }
+        if(timer.getFullYear() == now_y && timer.getMonth()+1 < now_m){
+          return 'timeOut';
+        }
+        if(timer.getFullYear() == now_y && timer.getMonth()+1 == now_m && timer.getDate() < now_d){
+          return 'timeOut';
+        }
+      
+
+        return timer.getDay()+'.'+(timer.getMonth() + 1) + '.' + timer.getDate() + '.' + timer.getFullYear();
+      })
+
+      return result.filter(item=>item!='timeOut')
     },
     allow_buy(){
       return this.form.filter(item=>{
@@ -126,8 +182,12 @@ export default {
   },
   methods:{
     async init(){
-
-      
+      let res = await getConfig('timelimit');
+      if(res.data.state == 0){alert(res.data.text);return};
+      let res2 = await getSpecialDate();
+      if(res2.data.state == 0){alert(res2.data.text);return};
+      this.timelimit = res.data.body[0].value;
+      this.specialDate = res2.data.body;
     },
     subTotle(data){
       if(data.number.length<4){return 0};
@@ -208,6 +268,8 @@ export default {
       }
     },
     date2str(value){
+      console.log(value)
+      if(value==''){return ''}
       let week = value.split('.')[0];
       let month = value.split('.')[1];
       let day = value.split('.')[2];

@@ -8,7 +8,19 @@ router = new Router({
 
 router
 	.all('/payHandle', payController.payHandle)
-
+	.all('/topUpHandle', payController.topUpHandle)
+	.all('/localPay', payController.localPay)
+	.all('/payPartHandle', payController.payPartHandle)
+	.all('/payResult', async (ctx,next) => {
+		ctx.response.body = `
+		<h1 style="color:#28a745">
+			Payment is successful: )
+		</h1>
+		<h2>
+			Please close this page and refresh the web page to see the result.
+		</h2>
+		`;
+	})
 
 
 module.exports = router;

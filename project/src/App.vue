@@ -3,6 +3,7 @@
     <top></top>
     <navb></navb>
     <router-view/>
+    <foot></foot>
 </div>
 
 
@@ -10,12 +11,13 @@
 </template>
 
 <script>
+import foot from './components/footer.vue';
 import top from './components/top.vue';
 import navb from './components/nav.vue';
 export default {
   name: 'App',
   components:{
-    top,navb
+    top,navb,foot
   },
   
 }

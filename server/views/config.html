@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<% include ./parts/head.html %>
+    <!-- source http://www.scnoob.com More templates http://www.scnoob.com/moban -->
+
+    <body>
+        <div class="app header-default side-nav-dark">
+            <div class="layout">
+                <% include ./parts/topNav.html %>
+                    <% include ./parts/leftNav.html %>
+
+                        <div class="page-container">
+
+                            <div class="main-content">
+                                <div class="container-fluid">
+
+                                    <div class="breadcrumb-wrapper row">
+                                        <div class="col-12 col-lg-3 col-md-6">
+                                            <h4 class="page-title">基本参数设置</h4>
+                                        </div>
+                                        <div class="col-12 col-lg-9 col-md-6">
+                                            <ol class="breadcrumb float-right">
+                                                <li>
+                                                    <a href="/admin">主页</a>
+                                                </li>
+                                                <li class="active"> / 基本参数设置</li>
+                                            </ol>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="container-fluid">
+                                    <div class="card">
+                                        <div class="card-header border-bottom">
+                                            <h4 class="card-title">基本参数</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-lg-10 col-md-12 col-xs-12">
+                                                    <form method="POST" action="/admin/config">
+                                                        <div class="form-group row">
+                                                            <label class="col-sm-2 col-form-label control-label">首充奖励</label>
+                                                            <div class="col-sm-10">
+                                                                <input type="number" class="form-control" name="reward" placeholder="首充奖励" value="<%= config.reward%>">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label class="col-sm-2 col-form-label control-label">购买时限</label>
+                                                            <div class="col-sm-10">
+                                                                <input type="text" class="form-control" name="timelimit" placeholder="购买时限" value="<%= config.timelimit%>">
+                                                            </div>
+                                                        </div>
+                                      
+                                                        <button class="btn btn-common">保存</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <div class="card">
+                                                <div class="card-header border-bottom">
+                                                    <h4 class="card-title">填写说明</h4>
+                                                </div>
+                                                <div class="card-body">
+                                                    <p class="card-description">
+                                                        【首冲奖励】请填写
+                                                        <code>整数</code> 
+                                                        例如：10
+                                                    </p>
+                                                    <p class="card-description">
+                                                        【购买时限】请填写
+                                                        <code>小时(0~23)-分钟(0~59)-秒(0~59)</code> 
+                                                        例如：<code>22-45-12</code>，
+                                                        表示开奖当天22点45分12秒前可投注
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <% include ./parts/foot.html %>
+    </body>
+
+    <!-- source http://www.scnoob.com More templates http://www.scnoob.com/moban -->
+
+</html>

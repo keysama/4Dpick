@@ -14,6 +14,8 @@ const pup = r => require.ensure([],() => r(require('../page/pup/index')),'pup')
 const history = r => require.ensure([],() => r(require('../page/history/index')),'history')
 const orders = r => require.ensure([],() => r(require('../page/orders/index')),'orders')
 const payResult = r => require.ensure([],() => r(require('../page/orders/result')),'payResult')
+
+const Top_up = r => require.ensure([],() => r(require('../page/pup/Top_up')),'Top_up')
 export default [{
 	path:'/',
 	component:App,				//顶级路由，www.xxx.com/#/
@@ -74,6 +76,12 @@ export default [{
 		{
 			path:'/pup',
 			component:pup,
+			meta:{checkLogin:true}
+		},
+		{
+			path:'/Top-up',
+			component:Top_up,
+			meta:{checkLogin:true}
 		},
 		{
 			path:'/history',

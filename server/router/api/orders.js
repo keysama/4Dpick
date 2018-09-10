@@ -10,6 +10,10 @@ router
 	.post('/createOrder', ordersController.createOrder)
 	.post('/getOrders', ordersController.getOrders)
 	.post('/getPiedOrders', ordersController.getPiedOrders)
+	.post('/createTopUp', ordersController.createTopUp)
+	.post('/getTopUp', ordersController.getTopUp)
+	.post('/getBets', ordersController.getBets)
+	
 
 
 module.exports = router;

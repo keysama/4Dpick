@@ -59,5 +59,11 @@ module.exports = {
 		let step1 = await db(sql);
 		if(step1 === false || step1.length<=0){return false};
 		return true;
+	},
+	getAmount : async (id) => {
+		let sql = `SELECT amount,first FROM user WHERE id=${id}`;
+		let step1 = await db(sql);
+		if(step1 === false || step1.length<=0){return false};
+		return step1[0];
 	}
 }

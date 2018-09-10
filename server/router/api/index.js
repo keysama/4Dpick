@@ -4,6 +4,8 @@ const account = require('./account.js');
 const result = require('./result.js');
 const orders = require('./orders.js');
 const pay = require('./pay.js');
+const config = require('./config.js');
+const comment = require('./comment.js');
 const apiController = require('../../controller/api/apiController.js')
 const test = require('./test.js')
 
@@ -16,6 +18,8 @@ router
 	.use(result.routes())
 	.use(orders.routes())
 	.use(pay.routes())
+	.use(config.routes())
+	.use(comment.routes())
 	.use(test.routes())
 	.all('/handle',async (ctx, next)=>{
 		console.log('有返回')

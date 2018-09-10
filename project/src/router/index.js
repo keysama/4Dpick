@@ -3,7 +3,7 @@ import VueRouter from 'vue-router';
 import routes from './routes.js';
 import store from '../store/index.js';
 import {LOGIN} from '../store/mutation_types.js';
-import {checkLogin} from '../api/account';
+import {checkLogin,getAmount} from '../api/account';
 
 Vue.use(VueRouter)
 const router=new VueRouter({
@@ -39,5 +39,14 @@ router.beforeEach((to,from,next)=>{
         next()
 	}
 })
-
+router.beforeEach(async (to,from,next)=>{
+	if(store.state.userInfo!=''){
+        let res = await getAmount(store.state.userInfo.id);
+        if(res.data.state == 0){alert(res.data.text);return;}
+        store.state.userInfo.amount = res.data.body.amount;
+        store.state.userInfo.first = res.data.body.first;
+        window.localStorage.setItem('userInfo', JSON.stringify(store.state.userInfo));
+	}
+	next();
+})
 export default router;

@@ -1,0 +1,67 @@
+<div class="side-nav expand-lg">
+    <div class="side-nav-inner">
+        <ul class="side-nav-menu">
+            <li class="side-nav-header">
+                <span>控制台</span>
+            </li>
+            <li class="nav-item dropdown <% if(!path || path=='/admin'){%>open<%}%>">
+                <a href="#" class="dropdown-toggle">
+                    <span class="icon-holder">
+                        <i class="lni-pie-chart"></i>
+                    </span>
+                    <span class="title">数据统计</span>
+                    <span class="arrow">
+                        <i class="lni-chevron-right"></i>
+                    </span>
+                </a>
+                <ul class="dropdown-menu sub-down">
+                    <li class="<% if(path=='/admin'){%>active<%}%>">
+                        <a href="#">下注号码</a>
+                    </li>
+                    <li>
+                        <a href="#">分销</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown <% if(path=='/admin/config' || path=='/admin/addDate'){%>open<%}%>">
+                <a class="dropdown-toggle" href="#">
+                    <span class="icon-holder">
+                        <i class="lni-control-panel"></i>
+                    </span>
+                    <span class="title">参数设置</span>
+                    <span class="arrow">
+                        <i class="lni-chevron-right"></i>
+                    </span>
+                </a>
+                <ul class="dropdown-menu sub-down">
+                    <li class="<% if(path=='/admin/config'){%>active<%}%>">
+                        <a href="/admin/config">基本参数</a>
+                    </li>
+                    <li class="<% if(path=='/admin/addDate'){%>active<%}%>">
+                        <a href="/admin/addDate">特别开奖期</a>
+                    </li>
+                </ul>
+            </li>
+            <!-- <li class="nav-item dropdown">
+                <a class="dropdown-toggle" href="#">
+                    <span class="icon-holder">
+                        <i class="lni-layers"></i>
+                    </span>
+                    <span class="title">文章管理</span>
+                    <span class="arrow">
+                        <i class="lni-chevron-right"></i>
+                    </span>
+                </a>
+                <ul class="dropdown-menu sub-down">
+                    <li>
+                        <a href="#">文章列表</a>
+                    </li>
+                    <li>
+                        <a href="#">写文章</a>
+                    </li>
+                </ul>
+            </li> -->
+
+        </ul>
+    </div>
+</div>

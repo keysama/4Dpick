@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<% include ./parts/head.html %>
+    <!-- source http://www.scnoob.com More templates http://www.scnoob.com/moban -->
+<%
+    function filteTime(value) {
+       var now = new Date(parseInt(value)),
+         y = now.getFullYear(),
+        m = now.getMonth() + 1,
+        d = now.getDate();
+        return y + "-" + (m < 10 ? "0" + m : m) + "-" + (d < 10 ? "0" + d : d);
+    }
+%>
+    <body>
+        <div class="app header-default side-nav-dark">
+            <div class="layout">
+                <% include ./parts/topNav.html %>
+                    <% include ./parts/leftNav.html %>
+
+                        <div class="page-container">
+
+                            <div class="main-content">
+                                <div class="container-fluid">
+
+                                    <div class="breadcrumb-wrapper row">
+                                        <div class="col-12 col-lg-3 col-md-6">
+                                            <h4 class="page-title">特别开彩期</h4>
+                                        </div>
+                                        <div class="col-12 col-lg-9 col-md-6">
+                                            <ol class="breadcrumb float-right">
+                                                <li>
+                                                    <a href="/admin">主页</a>
+                                                </li>
+                                                <li class="active"> / 特别开彩期</li>
+                                            </ol>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="container-fluid">
+                                    <div class="card">
+                                        <div class="card-header border-bottom">
+                                            <h4 class="card-title">特别开彩期</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-12 col-xl-12 m-b-10">
+                                                    <div class="card">
+                                                        <div class="card-header border-bottom">
+                                                            <h4 class="card-title">列表</h4>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="table-responsive">
+                                                                <table class="table mb-0">
+                                                                    <thead class="thead-default">
+                                                                        <tr>
+                                                                            <th>#</th>
+                                                                            <th>日期</th>
+                                                                            <th>备注</th>
+                                                                            <th>添加时间</th>
+                                                                            <th>操作</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <% for(let i=0;i<dates.length;i++) {%>
+                                                                        <tr>
+                                                                            <th scope="row"><%= dates[i].id %></th>
+                                                                            <td><%= dates[i].date %></td>
+                                                                            <td><%= dates[i].remark %></td>
+                                                                            <td><%= filteTime(dates[i].createTime) %></td>
+                                                                            <td><a href="/admin/deleteDate/<%= dates[i].id%>" class="btn btn-danger"  onClick="return confirm('确定删除?');">删除</a></td>
+                                                                        </tr>
+                                                                        <% } %>
+                                                                     
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-lg-10 col-md-12 col-xs-12">
+                                                    <form role="form" method="POST" action="/admin/addDate">
+                                                        <div class="form-group row">
+                                                            <label class="col-sm-2 col-form-label control-label">开奖日期</label>
+                                                            <div class="col-sm-10">
+                                                                <input type="text" class="form-control" name="date" placeholder="开奖日期">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label class="col-sm-2 col-form-label control-label">备注</label>
+                                                            <div class="col-sm-10">
+                                                                <input type="text" class="form-control" name="remark" placeholder="备注">
+                                                            </div>
+                                                        </div>
+                                      
+                                                        <button class="btn btn-common">添加</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <div class="card">
+                                                <div class="card-header border-bottom">
+                                                    <h4 class="card-title">填写说明</h4>
+                                                </div>
+                                                <div class="card-body">
+                                                    <p class="card-description">
+                                                        【开奖日期】请填写
+                                                        <code>年-月-日</code> 
+                                                        例如：<code>2018-9-10</code>，
+                                                        用户即可在2018年9月10日购买时限前下注2018-9-10的开彩
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <% include ./parts/foot.html %>
+    </body>
+
+    <!-- source http://www.scnoob.com More templates http://www.scnoob.com/moban -->
+
+</html>

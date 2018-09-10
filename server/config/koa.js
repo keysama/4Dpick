@@ -5,6 +5,8 @@ const path = require('path');//用来解析路径，自带的包
 const config = require('./index');//根据运行环境返回相应配置文件
 const router = require('../router');//路由
 const cors = require('koa2-cors');
+const ejs = require('ejs');
+const views = require('koa-views');
 
 const error = require('../middlewares/error.js');//错务处理的中间件
 const logger = require('../middlewares/logger.js');//配置好的日志中间件
@@ -28,6 +30,8 @@ module.exports = () => {
 	app.use(bodyParser());//请求解析的中间件
 
 	app.use(session(app));//session的中间件，通过ctx.session存取
+
+	app.use(views(path.resolve(__dirname,'../views'),{map:{html:'ejs'}}));//模板引擎
 
 	router(app);//路由
 

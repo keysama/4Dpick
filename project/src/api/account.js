@@ -35,3 +35,7 @@ export const editInfo = (data)=>{
 export const editPass = (data)=>{
 	return axios.post('api/account/editPass',data)
 };
+
+export const getAmount = (id)=>{
+	return axios.post('api/account/getAmount',{id:id})
+};

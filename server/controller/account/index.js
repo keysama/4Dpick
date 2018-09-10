@@ -88,5 +88,14 @@ module.exports={
 		ctx.logger.info('用户:'+ctx.session.user.username+'修改密码');
 		ctx.body={state:1,text:'修改成功'};
 		await next();
+	},
+	getAmount : async (ctx,next) => {
+		let id = ctx.request.body.id;
+
+		let step1 = await accountModules.getAmount(id);
+		if(step1 === false){ctx.errorCode = 0;next();return};
+
+		ctx.body={state:1,text:'获取余额',body:step1};
+		await next();
 	}
 }

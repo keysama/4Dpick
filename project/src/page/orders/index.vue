@@ -5,6 +5,9 @@
 				<span>公告公告公告公告公告公告公告公告公告公告</span>
 			</div>
       <h2>Order Confirmation</h2>
+      <div class="form-group">
+        Your current available credit is RM{{$store.state.userInfo.amount}}.00.
+      </div>
       <h2 class="text-right text-success" v-if="orderList.state == 1">√ Already paid</h2>
 			<div class="registe-box row">
         <div class="col-md-12">
@@ -34,9 +37,13 @@
             </tbody>
         </table>
         </div>
+        <div class="text-right" v-if="$store.state.userInfo.amount < total && orderList.state == 0">
+          Still need Pay RM{{total - $store.state.userInfo.amount}}.00 online.
+        </div>
+        <br/>
         <div class="d-flex justify-content-between align-items-center">
           <span class="btn btn-lg btn-defult" @click="$router.go(-1)">< back</span>
-          <span class="btn btn-lg btn-success" @click="pay" v-if="orderList.state == 0">Place Bat</span>
+          <span class="btn btn-lg btn-success" @click="_localPay" v-if="orderList.state == 0">Place Bat</span>
         </div>
         
         </div>
@@ -46,6 +53,7 @@
 </template>
 
 <script>
+import {localPay} from '../../api/pay.js';
 import {getOrders} from '../../api/orders.js';
 export default {
   created(){
@@ -55,7 +63,7 @@ export default {
   data () {
     return {
       orderList : [],
-      id : ''
+      id : '',
     }
   },
   methods:{
@@ -64,8 +72,18 @@ export default {
       if(res.data.state == 0){alert(res.data.text);return};
       this.orderList = res.data.body;
     },
-    async pay(){
-
+    async _localPay(){
+      if(this.$store.state.userInfo.amount < this.total){
+        if(!confirm('Confirm payment?')){return}
+        this.pay(this.total - this.$store.state.userInfo.amount,this.$store.state.userInfo.amount);
+      }else{
+        if(!confirm('Confirm payment?')){return}
+        let res = await localPay(this.id,this.total);
+        if(res.data.state == 0){alert(res.data.text);return;}
+        location.reload();
+      }
+    },
+    async pay(money,lmoney){
 // ------支付接口-------
 	    var date = new Date();
 	    date.setHours(date.getHours()); 
@@ -93,13 +111,11 @@ export default {
       
       let Merchant = 'M0280';
 
-      let Reference = this.orderList.id;//唯一的标记
+      let Reference = this.orderList.id +'|' + lmoney;//唯一的标记
 
       let Customer = this.$store.state.userInfo.id;//区分用户的标记
 
-      let Amount = this.orderList.sheets.reduce(function(total,num){
-                          return total + parseInt(num.totle)
-                    },0)+'.00';//金额
+      let Amount = money+'.00';//金额
 
       let Currency = 'MYR';//币种
 
@@ -120,8 +136,8 @@ export default {
           Amount,
           Customer,
           Datetime,
-          FrontURI:'http://111.230.249.243:8083/',
-          BackURI:'http://111.230.249.243:8083/api/pay/payHandle',
+          FrontURI:'http://111.230.249.243:8083/api/pay/payResult',
+          BackURI:'http://111.230.249.243:8083/api/pay/payPartHandle',
           ClientIP,
           key,
       };
@@ -130,6 +146,7 @@ export default {
       form.action = 'http://api.besthappylife.biz/MerchantTransfer';
       form.method = 'post';
       form.id = new Date().getTime();
+      form.target="_blank";
       
       Object.keys(finaDate).forEach(item=>{
         let input = document.createElement('input');
@@ -148,6 +165,14 @@ export default {
     $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip(); 
     });
+  },
+  computed:{
+    total(){
+      if(this.orderList==''){return 0};
+            return this.orderList.sheets.reduce(function(total,num){
+                          return total + parseInt(num.totle)
+                    },0);
+    }
   }
 }
 </script>

@@ -13,6 +13,7 @@ router
 	.post('/logout', accountController.logout)
 	.post('/editInfo',accountController.edit)
 	.post('/editPass',accountController.editPass)
+	.post('/getAmount',accountController.getAmount)
 
 	
 

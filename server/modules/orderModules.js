@@ -67,7 +67,89 @@ module.exports = {
 		if(step1===false){return false}
 			
 		return true;
-	}
+	},
+	topUpHandle : async (tid,user,amount) => {
+
+		let res = await startTrans(async (trans)=>{
+			console.log('开始充值操作，订单id：'+tid+'，用户：'+user+'，钱：'+amount)
+			console.log('将订单状态变为1')
+			let sql1 = `UPDATE topUp SET state=1 WHERE id=${tid} AND user=${user}`;
+			let step1 = await dbs(sql1,trans);
+			if(step1===false){return false}
+
+			if(step1.changedRows==0){return false};
+			let sql2 = `SELECT amount,first FROM user WHERE id=${user}`;
+			let step2 = await dbs(sql2,trans);
+			if(step2===false){return false}
+			console.log('查询用户账户：'+step2[0].amount+'，是否第一次：'+step2[0].first)
+
+			let addAt = parseInt(amount);
+			let oldAt = step2[0].amount=='' ? 0 : parseInt(step2[0].amount);
+
+			let reward = 0;
+			if(step2[0].first==1){
+				let sql3 = `SELECT value FROM config WHERE name='reward'`;
+				let step3 = await dbs(sql3,trans);
+				if(step3 === false){return false}
+				reward = step3[0].value;
+				console.log('用户第一次充值，奖励:'+reward)
+			}
+
+			let sql4 = `UPDATE user SET amount='${oldAt+addAt+parseInt(reward)}',first=0 WHERE id=${user}`;
+			let step4 = await dbs(sql4,trans);
+			if(step4===false){return false}
+			console.log('更新用户钱包，原来的钱：'+oldAt+'，充值的钱：'+addAt+'，奖励的钱：'+reward+'计算后:'+(oldAt+addAt+parseInt(reward)))
+
+			return true;
+		})
+
+		if(res===false){return false}
+		return true;
+	},
+	createTopUp : async (user,date,amount) => {
+		let sql1 = `INSERT INTO topUp (user,date,amount,state,createTime) VALUES (${user},'${date}','${amount}',0,'${Date.now()}')`;
+		let step1 = await db(sql1);
+		if(step1===false){return false}
+			
+		return step1.insertId;
+	},
+	getTopUp : async (user) => {
+		let sql1 = `SELECT * FROM topUp WHERE user=${user} ORDER BY id DESC`;
+		let step1 = await db(sql1);
+		if(step1===false){return false}
+			
+		return step1;
+	},
+	localPay : async (id,money,user) => {
+		let res = await startTrans(async (trans)=>{
+			let sql1 = `SELECT amount FROM user WHERE id=${user}`;
+			let step1 = await dbs(sql1,trans);
+			if(step1===false){return false}
+
+			let oldAt = step1[0].amount=='' ? 0 : parseInt(step1[0].amount);
+
+			if(money > oldAt){return false};//余额不足
+
+			let sql2 = `UPDATE user SET amount='${oldAt-money}' WHERE id=${user}`;
+			let step2 = await dbs(sql2,trans);
+			if(step2===false){return false}
+
+			let sql3 = `UPDATE orders SET state=1 WHERE id=${id}`;
+			let step3 = await dbs(sql3,trans);
+			if(step3===false){return false}
+
+			return true;
+		})
+
+		if(res===false){return false}
+		return true;
+	},
+	getBets : async (user) => {
+		let sql1 = `SELECT * FROM orders right join order_sheets on orders.id=order_sheets.oid WHERE orders.user=${user} AND orders.state=1 ORDER BY orders.id DESC`;
+		let step1 = await db(sql1);
+		if(step1===false){return false};
+		return step1;
+	} 
 }
 
 function subTotal(data){
